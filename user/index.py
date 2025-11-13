@@ -19,4 +19,4 @@ def user_menu():
         elif option == "0":
             break
         else:
-            print("⚠️ Opción no válida. Intente nuevamente.")
+            print("Opción no válida. Intente nuevamente.")

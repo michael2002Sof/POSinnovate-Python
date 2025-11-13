@@ -25,10 +25,10 @@ def main_menu():
         elif option == "4":
             user_menu()
         elif option == "0":
-            print("👋 Saliendo del sistema...")
+            print("Saliendo del sistema...")
             break
         else:
-            print("⚠️ Opción no válida. Intente de nuevo.")
+            print("Opción no válida. Intente de nuevo.")
 
 if __name__ == "__main__":
     main_menu()
