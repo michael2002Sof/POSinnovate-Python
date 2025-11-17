@@ -1,5 +1,9 @@
 productos = []
 
+#=================================================================================================
+#Clase de Productos:
+#=================================================================================================
+
 class Producto:
     def __init__(self,
                 fecha_registro,
@@ -27,6 +31,10 @@ class Producto:
             self.genero = "caballero"
 
         self.estado = "disponible" if self.cantidad > 0 else "agotado"
+
+#=================================================================================================
+#Registro de Productos (RF 5.2)
+#=================================================================================================
 
     def registrar_productos():
         tipos_validos = ["deportivo", "casual", "formal", "sandalia", "bota"]
@@ -64,7 +72,7 @@ class Producto:
                     if tipo_ in tipos_validos:
                         break
                     else:
-                        print("Tipo no válido.\n")
+                        print("Tipo no válido, intentelo nuevamente.\n")
 
                 #Validación estricta de talla (36–45)
                 while True:
@@ -80,6 +88,69 @@ class Producto:
 
                 color_ = input("Ingresa el color del zapato: ").strip().lower()
 
+                # Buscar si ya existe un producto con misma marca, modelo, tipo, talla y color
+                producto_existente = None
+                for producto in productos:
+                    if (producto.marca == marca_ and
+                        producto.modelo == modelo_ and
+                        producto.tipo == tipo_ and
+                        producto.talla == talla_ and
+                        producto.color == color_):
+                        producto_existente = producto
+                        break
+
+                if producto_existente is not None:
+                    print("\nEste producto ya se encuentra registrado con las mismas características.")
+                    while True:
+                        opcion_2 = input("¿Desea actualizar solo la cantidad y el precio unitario? (SI/NO): ").strip().lower()
+                        if opcion_2 == "si":
+                            # Cantidad a sumar
+                            while True:
+                                cantidad_texto = input("Ingresa la cantidad de pares a agregar: ").strip()
+                                try:
+                                    cantidad_extra = int(cantidad_texto)
+                                    if cantidad_extra >= 0:
+                                        break
+                                    else:
+                                        print("Cantidad negativa no permitida.\n")
+                                except ValueError:
+                                    print("Cantidad inválida.\n")
+
+                            # Nuevo precio unitario (reemplaza el anterior)
+                            while True:
+                                precio_texto = input("Ingresa el nuevo precio de venta por par (o deja vacío para mantener el actual): ").strip()
+                                if precio_texto == "":
+                                    nuevo_precio = producto_existente.precio_venta
+                                    break
+                                try:
+                                    nuevo_precio = float(precio_texto)
+                                    if nuevo_precio >= 0:
+                                        break
+                                    else:
+                                        print("El precio no puede ser negativo.\n")
+                                except ValueError:
+                                    print("Precio inválido.\n")
+
+                            # Actualizar producto existente
+                            producto_existente.cantidad += cantidad_extra
+                            producto_existente.precio_venta = nuevo_precio
+                            producto_existente.estado = "disponible" if producto_existente.cantidad > 0 else "agotado"
+
+                            print("\nProducto actualizado correctamente.")
+                            print(f"Nueva cantidad: {producto_existente.cantidad} pares")
+                            print(f"Nuevo precio unitario: ${producto_existente.precio_venta}\n")
+                            break
+
+                        elif opcion_2 == "no":
+                            print("No se modificó el producto.\n")
+                            break
+                        else:
+                            print("Opción inválida, responde SI o NO.\n")
+
+                    # En cualquier caso, volvemos al inicio del bucle principal
+                    continue
+
+                # Si no existe producto igual, se registra como nuevo
                 while True:
                     cantidad_texto = input("Ingresa la cantidad de pares producidos: ").strip()
                     try:
@@ -123,7 +194,6 @@ class Producto:
             else:
                 print("Opción no válida. Responde SI o NO.\n")
 
-    #Metodo de impresion provicional
     def __str__(self):
         return (
             f"Fecha: {self.fecha_registro}:\n"
@@ -132,6 +202,9 @@ class Producto:
             f"Color: {self.color} - Cantidad: {self.cantidad} pares - "
             f"Precio: ${self.precio_venta} - Estado: {self.estado}." 
         )
+
+#=================================================================================================
+
 
 Producto.registrar_productos()
 
