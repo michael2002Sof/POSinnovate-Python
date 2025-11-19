@@ -108,6 +108,38 @@ class ManageUser:
         for u in self.users:
             print(u)
 
+        # Registrar usuario ADMIN con todos los permisos
+    def register_admin(self):
+        print("\n--- Registrar Usuario Administrador ---")
+
+        # Crear rol admin si no existe
+        admin_role = None
+        for r in self.roles:
+            if r.name.lower() == "admin":
+                admin_role = r
+                break
+
+        if not admin_role:
+            admin_role = Rol(
+                "admin",
+                self.AVAILABLE_MODULES.copy(),   # Todos los módulos
+                self.AVAILABLE_PERMISSIONS.copy()  # Todos los permisos
+            )
+            self.roles.append(admin_role)
+            print("✓ Rol 'admin' creado automáticamente con todos los permisos.")
+
+        # Datos del usuario admin
+        name = input("Nombre del admin: ")
+        email = input("Correo del admin: ")
+        password = input("Contraseña del admin: ")
+
+        # Crear usuario
+        user = User(name, email, password, admin_role.name)
+        self.users.append(user)
+
+        print(f"\n✓ Usuario administrador '{name}' registrado correctamente\n")
+
+
 
 def user_menu():
     manager = ManageUser()
@@ -117,6 +149,7 @@ def user_menu():
         print("1. Registrar usuario")
         print("2. Registrar rol")
         print("3. Listar usuarios")
+        print("4. Registrar usuario admin")
         print("0. Volver al menú principal")
 
         option = input("Seleccione una opción: ")
@@ -129,6 +162,9 @@ def user_menu():
 
         elif option == "3":
             manager.list_users()
+            
+        elif option == "4":
+            manager.register_admin()
 
         elif option == "0":
             break
