@@ -1,4 +1,5 @@
-from .insumo import insumos  # Lista de insumos registrada en el módulo de inventario
+from .insumo import insumos
+from .solicitud import solicitar_insumos
 
 productos = []
 
@@ -207,7 +208,7 @@ class Producto:
         )
 
 #=================================================================================================
-# Consultar disponibilidad de insumos (RF 5.1)
+# RF 5.1 – Consultar insumos registrados en inventario (vista Producción)
 #=================================================================================================
 
 def consultar_insumos_produccion():
@@ -282,7 +283,8 @@ def menu_produccion():
         print("=" * 40)
         print("1. Registrar productos (RF 5.2)")
         print("2. Consultar insumos registrados en inventario (RF 5.1)")
-        print("3. Volver al menú principal\n")
+        print("3. Solicitar insumos para producción (RF 5.3)")
+        print("4. Volver al menú principal\n")
 
         opcion = input("Selecciona una opción: ").strip()
 
@@ -291,11 +293,12 @@ def menu_produccion():
         elif opcion == "2":
             consultar_insumos_produccion()
         elif opcion == "3":
+            solicitar_insumos(insumos)
+        elif opcion == "4":
             print("\nVolviendo al menú principal...\n")
             break
         else:
             print("Opción no válida.\n")
-
 
 if __name__ == "__main__":
     menu_produccion()

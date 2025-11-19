@@ -1,3 +1,5 @@
+from .solicitud import gestionar_solicitudes_inventario
+
 insumos = []
 
 #=================================================================================================
@@ -302,19 +304,27 @@ def menu_inventario():
         print("1. Registrar / Modificar Insumo.")
         print("2. Consultar Insumos.")
         print("3. Ver alertas de stock bajo.")
-        print("4. Volver\n")
+        print("4. Gestionar solicitudes de insumos.")  # NUEVA OPCIÓN
+        print("5. Volver\n")
 
         opcion = input("Selecciona una opción: ").strip()
 
         if opcion == "1":
             Insumo.registrar_insumos()
+
         elif opcion == "2":
             Insumo.consultar_insumos()
+
         elif opcion == "3":
             mostrar_alertas_stock()
+
         elif opcion == "4":
+            gestionar_solicitudes_inventario()
+
+        elif opcion == "5":
             print("\nVolviendo al menú principal...\n")
             break
+
         else:
             print("Opción no válida.\n")
 
