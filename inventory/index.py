@@ -1,22 +1,30 @@
-# inventory/index.py
+from .modules.insumo import menu_inventario
+from .modules.product import menu_produccion
 
-def inventory_menu():
+def menu_principal():
     while True:
-        print("\n--- Módulo de Inventario ---")
-        print("1. Registrar producto")
-        print("2. Registrar insumo")
-        print("3. Ver inventario general")
-        print("0. Volver al menú principal")
+        print("")
+        print("=" * 50)
+        print("POSInnovate - Módulo Inventory")
+        print("=" * 50)
+        print("1. Ingresar como Gestor de Inventario")
+        print("2. Ingresar como Gestor de Producción")
+        print("3. Salir\n")
 
-        option = input("Seleccione una opción: ")
+        opcion = input("Seleccione una opción: ").strip()
 
-        if option == "1":
-            print("Función para registrar producto (próximamente).")
-        elif option == "2":
-            print("Función para registrar insumo (próximamente).")
-        elif option == "3":
-            print("Función para mostrar inventario (próximamente).")
-        elif option == "0":
+        if opcion == "1":
+            menu_inventario()
+
+        elif opcion == "2":
+            menu_produccion()
+
+        elif opcion == "3":
+            print("\nSaliendo del sistema Inventory...\n")
             break
+
         else:
-            print("Opción no válida. Intente nuevamente.")
+            print("Opción no válida.\n")
+
+if __name__ == "__main__":
+    menu_principal()

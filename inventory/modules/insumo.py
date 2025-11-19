@@ -38,7 +38,7 @@ class Insumo:
                     insumo_existente = insumo
                     break
 
-            # CASO 1: INSUMO EXISTENTE
+            # Caso 1: Insumo existente.
             if insumo_existente is not None:
                 print(f"\nEl insumo '{nombre_}' ya se encuentra registrado.")
 
@@ -90,7 +90,7 @@ class Insumo:
                     else:
                         print("Opción inválida.\n")
 
-            # CASO 2: NUEVO INSUMO
+            # Caso 2: Nuevo Insumo.
             else:
                 # Unidad medida
                 while True:
@@ -285,7 +285,7 @@ def mostrar_resumen_alertas():
         print("\nNo hay alertas de stock.\n")
     else:
         print(f"\nHay {cantidad} insumo(s) con stock bajo.")
-        print("Revisa el menú 'Ver alertas de stock bajo'.\n")
+        print("Revisa la opcion: Ver alertas de stock bajo.\n")
 
 
 #=================================================================================================
@@ -294,7 +294,6 @@ def mostrar_resumen_alertas():
 
 def menu_inventario():
     while True:
-        
         print("")
         print("="*40)
         print("Modulo de Inventario")
@@ -303,24 +302,21 @@ def menu_inventario():
         print("1. Registrar / Modificar Insumo.")
         print("2. Consultar Insumos.")
         print("3. Ver alertas de stock bajo.")
-        print("4. Salir\n")
+        print("4. Volver\n")
 
         opcion = input("Selecciona una opción: ").strip()
 
         if opcion == "1":
             Insumo.registrar_insumos()
-
         elif opcion == "2":
             Insumo.consultar_insumos()
-
         elif opcion == "3":
             mostrar_alertas_stock()
-
         elif opcion == "4":
-            print("\nSaliendo. del Sistema...\n")
+            print("\nVolviendo al menú principal...\n")
             break
-
         else:
             print("Opción no válida.\n")
 
-menu_inventario()
+if __name__ == "__main__":
+    menu_inventario()
