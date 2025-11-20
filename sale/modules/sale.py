@@ -1,7 +1,8 @@
 # sale/modules/sale.py
 
-from inventory.modules.product import products   # ← IMPORTACIÓN CLAVE
 
+from inventory.modules.product import products   # ← IMPORTACIÓN CLAVE
+from .voucher import generar_voucher
 sales_history = []
 
 def register_sale():
@@ -42,11 +43,16 @@ def register_sale():
     }
 
     sales_history.append(venta)
+    
 
     print("\nVenta registrada con éxito.")
     print(f"Producto: {venta['producto']}")
     print(f"Cantidad: {venta['cantidad']}")
     print(f"Total: ${venta['total']}")
+
+    generar_voucher(venta)     #Aqui es donde la funcion hace su efecto y se crea la factura
+
+
 
 def sale_menu():
     while True:
@@ -72,6 +78,7 @@ def sale_menu():
 from inventory.modules.product import products   # ← IMPORTACIÓN CLAVE
 
 sales_history = []
+
 
 def register_sale():
     print("\n--- Registrar Venta ---")
