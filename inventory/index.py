@@ -25,11 +25,11 @@ from .modules.solicitud import (
 
 def menu_inventario():
     opciones = {
-        "1": ("Registrar / Modificar Insumo (RF 2.1)", Insumo.registrar_insumos),
-        "2": ("Consultar Insumos (RF 2.2)", Insumo.consultar_insumos),
-        "3": ("Ver alertas de stock bajo (RF 2.3)", mostrar_alertas_stock),
-        "4": ("Gestionar solicitudes de insumos (Inventario)", gestionar_solicitudes_inventario),
-        "5": ("Salir", None)
+        "1": ("Registrar / Modificar Insumos.", Insumo.registrar_insumos),
+        "2": ("Consultar Insumos.", Insumo.consultar_insumos),
+        "3": ("Ver Alertas de Stock Bajo.", mostrar_alertas_stock),
+        "4": ("Gestionar Solicitud de Insumos.", gestionar_solicitudes_inventario),
+        "5": ("Salir del Sistema.", None)
     }
 
     while True:
@@ -41,6 +41,8 @@ def menu_inventario():
 
         for clave, (desc, _) in opciones.items():
             print(f"{clave}. {desc}")
+
+        print("=" * 50)
 
         opcion = input("\nSeleccione una opción: ").strip()
 
@@ -62,10 +64,10 @@ def menu_inventario():
 
 def menu_produccion():
     opciones = {
-        "1": ("Registrar productos terminados (RF 5.2)", Producto.registrar_productos),
-        "2": ("Consultar insumos desde producción (RF 5.1)", consultar_insumos_produccion),
-        "3": ("Solicitar insumos para producción (RF 5.3)", lambda: solicitar_insumos(insumos)),
-        "4": ("Salir", None)
+        "1": ("Registrar Productos.", Producto.registrar_productos),
+        "2": ("Consultar Insumos.", consultar_insumos_produccion),
+        "3": ("Solicitar Insumos.", lambda: solicitar_insumos(insumos)),
+        "4": ("Salir del Sistema.", None)
     }
 
     while True:
@@ -75,6 +77,8 @@ def menu_produccion():
 
         for clave, (desc, _) in opciones.items():
             print(f"{clave}. {desc}")
+
+        print("=" * 50)
 
         opcion = input("\nSeleccione una opción: ").strip()
 

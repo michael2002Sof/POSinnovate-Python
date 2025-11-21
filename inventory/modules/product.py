@@ -27,6 +27,19 @@ class Producto:
 
         self.estado = "disponible" if self.cantidad > 0 else "agotado"
 
+    def __str__(self):
+        return (
+            f"\n================================================================\n"
+            f"Fecha registro: {self.fecha_registro}\n"
+            f"Código: {self.codigo}\n"
+            f"Marca: {self.marca} | Modelo: {self.modelo} | Tipo: {self.tipo}\n"
+            f"Talla: {self.talla} | Color: {self.color} | Género: {self.genero}\n"
+            f"Cantidad: {self.cantidad} par(es)\n"
+            f"Precio unitario: ${self.precio_venta}\n"
+            f"Estado: {self.estado}\n"
+            f"================================================================"
+        )
+
 # ===============================================================
 # REGISTRAR PRODUCTOS (RF 5.2)
 # ===============================================================
@@ -52,7 +65,7 @@ class Producto:
                 tipo_ = input(f"Tipo ({', '.join(tipos_validos)}): ").strip().lower()
                 if tipo_ in tipos_validos:
                     break
-                print("Tipo inválido.\n")
+                print("Tipo inválido, ingresa un tipo de modelo permitido.\n")
 
             # Talla 36 a 45
             while True:
@@ -60,70 +73,105 @@ class Producto:
                     talla_ = float(input("Talla (36-45): "))
                     if 36 <= talla_ <= 45:
                         break
-                except:
-                    pass
-                print("Talla inválida.\n")
+                    else:
+                        print("Talla inválida, ingresa un número entre 36 y 45.\n")
+                except ValueError:
+                    print("Talla inválida, ingresa un número válido.\n")
 
             color_ = input("Color: ").strip().lower()
 
-            # Buscar si existe
+# ===================================================================
+# SI EXISTE - MODIFICAR
+# ===================================================================
+
             existente = next((p for p in productos if 
                               p.marca == marca_ and p.modelo == modelo_ and 
                               p.tipo == tipo_ and p.talla == talla_ and p.color == color_), None)
 
             if existente:
+                print("=" * 40) 
+                print("ADVERTENCIA:")
                 print("\nProducto ya registrado.")
+                print("=" * 40)
 
                 while True:
-                    op = input("¿Actualizar cantidad y precio? (SI/NO): ").strip().lower()
+                    op = input("\n¿Desea actualizar cantidad y precio? (SI/NO): ").strip().lower()
+                    
                     if op == "si":
+
                         while True:
                             try:
                                 extra = int(input("Cantidad a agregar: "))
-                                if extra >= 0: break
-                            except: pass
-                            print("Cantidad inválida.\n")
+                                if extra >= 0:
+                                    break
+                                else:
+                                    print("La cantidad debe ser 0 o mayor.\n")
+                            except ValueError:
+                                print("Cantidad inválida.\n")
 
                         while True:
                             precio_ = input("Nuevo precio (o enter para mantener): ").strip()
+
                             if precio_ == "":
                                 nuevo_precio = existente.precio_venta
                                 break
+
                             try:
                                 nuevo_precio = float(precio_)
-                                if nuevo_precio >= 0: break
-                            except: pass
-                            print("Precio inválido.\n")
+                                if nuevo_precio >= 0:
+                                    break
+                                else:
+                                    print("El precio debe ser igual o mayor a 0.\n")
+                            except ValueError:
+                                print("Precio inválido.\n")
 
                         existente.cantidad += extra
                         existente.precio_venta = nuevo_precio
                         existente.estado = "disponible" if existente.cantidad > 0 else "agotado"
 
-                        print("\nProducto actualizado.\n")
+                        print("")
+                        print("=" * 40) 
+                        print("¡PRODUCTO ACTUALIZADO CORRECTAMENTE!")
+                        print("=" * 40) 
+                        print("")
                         break
 
                     elif op == "no":
-                        print("\nNo se modificó.\n")
+                        print("¡NO SE MODIFICO EL PRODUCTO!.\n")
                         break
+
+                    else:
+                        print("Opción inválida. Responda SI o NO.\n")
+
 
                 cont = input("¿Registrar otro? (SI/NO): ").strip().lower()
                 if cont != "si": break
                 continue
 
-            # Si no existe; registrar uno nuevo
+# ===================================================================
+# NO EXISTE - REGISTRAR NUEVO
+# ===================================================================
+
             while True:
                 try:
                     cantidad_ = int(input("Cantidad: "))
-                    if cantidad_ >= 0: break
-                except: pass
-                print("Cantidad inválida.\n")
+                    if cantidad_ > 0:
+                        break
+                    else:
+                        print("La cantidad debe ser mayor a 0.\n")
+                except ValueError:
+                    print("Cantidad inválida, ingresa un número entero.\n")
 
             while True:
                 try:
                     precio_venta_ = float(input("Precio venta: "))
-                    if precio_venta_ >= 0: break
-                except: pass
-                print("Precio inválido.\n")
+                    if precio_venta_ > 0:
+                        break
+                    else:
+                        print("El precio debe ser mayor a 0.\n")
+                except ValueError:
+                    print("Precio inválido, ingresa un número válido.\n")
+
 
             producto = Producto(fecha_registro_, marca_, modelo_, tipo_, talla_, color_, cantidad_, precio_venta_)
             productos.append(producto)
@@ -134,29 +182,36 @@ class Producto:
             if cont != "si":
                 break
 
-
 # ===============================================================
 # CONSULTA DE INSUMOS DESDE PRODUCCIÓN (RF 5.1)
 # ===============================================================
 
 def consultar_insumos_produccion():
     if not insumos:
-        print("\nInventario vacío.\n")
+        print("")
+        print("=" * 40)
+        print("¡NO HAY INSUMOS REGISTRADOS!")
+        print("=" * 40)
         return
 
     while True:
-        print("\nConsulta de insumos desde producción")
+        print("")
+        print("=" * 40)
+        print("CONSULTA DE INSUMOS")
+        print("=" * 40)
         print("1. Buscar por código")
         print("2. Buscar por nombre")
         print("3. Ver todos")
         print("4. Volver")
+        print("=" * 40)
+        print("")
 
         opcion = input("Opción: ").strip()
 
         if opcion == "1":
             try:
                 c = int(input("Código: "))
-            except:
+            except ValueError:
                 print("Código inválido.")
                 continue
 

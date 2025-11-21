@@ -13,13 +13,18 @@ class SolicitudInsumo:
         self.items = items
 
     def __str__(self):
-        txt = [f"\nSolicitud #{self.codigo} - Fecha: {self.fecha_solicitud}",
-               f"Responsable: {self.responsable} | Estado: {self.estado}",
-               "Items solicitados:"]
+        txt = [
+            f"================================================================\n"
+            f"Solicitud #{self.codigo} - Fecha: {self.fecha_solicitud}",
+            f"Responsable: {self.responsable} | Estado: {self.estado}",
+            "Items solicitados:\n",
+        ]
+
         for item in self.items:
             insumo = item["insumo"]
             cantidad = item["cantidad"]
-            txt.append(f"- {insumo.nombre} (cód {insumo.codigo}) → {cantidad} {insumo.unidad_medida}")
+            txt.append(f"- {insumo.nombre} | Codigo: {insumo.codigo}) - Cantidad Solicitada: {cantidad} {insumo.unidad_medida}")
+            f"\n================================================================\n"
         return "\n".join(txt)
 
 # =====================================================================
@@ -28,7 +33,10 @@ class SolicitudInsumo:
 
 def solicitar_insumos(lista_insumos):
     if not lista_insumos:
-        print("\nNo hay insumos registrados.\n")
+        print("")
+        print("=" * 40)
+        print("¡NO HAY INSUMOS REGISTRADOS!")
+        print("=" * 40)
         return
 
     # Validar fecha
@@ -57,24 +65,31 @@ def solicitar_insumos(lista_insumos):
         insumo = next((i for i in lista_insumos if i.codigo == codigo), None)
 
         if not insumo:
-            print("No encontrado.\n")
-            if input("¿Intentar otro? (SI/NO): ").lower() != "si":
+            print("!TU CODIGO DE INSUMO, NO FUE ENCONTRADO¡\n")
+            if input("¿Deseas intentar nuevamente? (SI/NO): ").lower() != "si":
                 break
             continue
 
         while True:
             try:
                 cantidad = float(input("Cantidad solicitada: "))
-                if cantidad > 0: break
-            except: pass
-            print("Cantidad inválida.\n")
+                if cantidad > 0:
+                    break
+                else:
+                    print("La cantidad debe ser mayor a 0.\n")
+            except ValueError:
+                print("Cantidad inválida, ingresa un número válido.\n")
 
         if cantidad > insumo.stock_actual:
-            print(f"Advertencia: stock disponible = {insumo.stock_actual}\n")
+            print("=" * 40)
+            print("ADVERTENCIA DE STOCK")
+            print(f"Stock disponible: {insumo.stock_actual}")
+            print(f"Cantidad solicitada: {cantidad} (NO DISPONIBLE)")
+            print("=" * 40)
 
         items_solicitados.append({"insumo": insumo, "cantidad": cantidad})
 
-        if input("¿Agregar otro insumo? (SI/NO): ").lower() != "si":
+        if input("\n¿Deseas agregar otro insumo? (SI/NO): ").lower() != "si":
             break
 
     if not items_solicitados:
@@ -84,13 +99,14 @@ def solicitar_insumos(lista_insumos):
     solicitud = SolicitudInsumo(fecha_solicitud, responsable, items_solicitados)
     solicitudes_insumos.append(solicitud)
 
-    print("\nSolicitud registrada correctamente.")
-    print(solicitud)
     print("")
-
+    print("=" * 64)
+    print("SOLICITUD REGISTRADA CORRECTAMENTE")
+    print(solicitud)
+    print("=" * 64)
 
 # =====================================================================
-# GESTIONAR SOLICITUDES (INVENTARIO)
+# GESTIONAR SOLICITUDES (RF 2.4)
 # =====================================================================
 
 def obtener_solicitudes_pendientes():
@@ -109,7 +125,9 @@ def gestionar_solicitudes_inventario():
         pendientes = obtener_solicitudes_pendientes()
 
         if not pendientes:
-            print("\nNo hay solicitudes pendientes.\n")
+            print("=" * 40)
+            print("!NO HAY SOLICITUDES PENDIENTES¡")
+            print("=" * 40)
             break
 
         print("\nSolicitudes pendientes:")
@@ -136,11 +154,11 @@ def gestionar_solicitudes_inventario():
         faltantes = verificar_disponibilidad_solicitud(solicitud)
 
         if faltantes:
-            print("\nNo hay stock suficiente para aprobar:")
+            print("\n!NO HAY STOCK SUFICIENTE PARA SER APROBADO¡\n")
             for insumo, faltante in faltantes:
                 print(f"- {insumo.nombre}: faltan {faltante}")
         else:
-            print("\nStock suficiente para aprobar.\n")
+            print("\n!STOCK SUFICIENTE PARA SER APROBADO¡\n")
 
         print("\nA = Aprobar | R = Rechazar | N = Nada\n")
 
@@ -155,11 +173,19 @@ def gestionar_solicitudes_inventario():
                 item["insumo"].stock_actual -= item["cantidad"]
 
             solicitud.estado = "aprobada"
-            print("\nSolicitud aprobada.\n")
+            print("")
+            print("=" * 40)
+            print("!SOLICITUD APROBADA¡")
+            print("=" * 40)
+            print("")
 
         elif op == "r":
             solicitud.estado = "rechazada"
-            print("\nSolicitud rechazada.\n")
+            print("")
+            print("=" * 40)
+            print("!SOLICITUD RECHAZADA¡")
+            print("=" * 40)
+            print("")
 
         elif op == "n":
             print("\nSin cambios.\n")
