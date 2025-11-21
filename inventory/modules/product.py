@@ -1,4 +1,5 @@
 from .insumo import insumos
+from datetime import datetime
 
 productos = []
 
@@ -48,15 +49,9 @@ class Producto:
         tipos_validos = ["deportivo", "casual", "formal", "sandalia", "bota"]
 
         while True:
-            # Validar fecha
-            while True:
-                fecha_registro_ = input("Fecha (DD/MM/AAAA): ").strip()
-                p = fecha_registro_.split("/")
-                if len(p) == 3 and all(x.isdigit() for x in p):
-                    d, m, a = map(int, p)
-                    if 1 <= d <= 31 and 1 <= m <= 12 and a >= 2025:
-                        break
-                print("Fecha inválida.\n")
+            # Fecha automática con datetime (sin pedir por teclado)
+            fecha_registro_ = datetime.now().strftime("%d/%m/%Y")
+            print(f"\nFecha de Registro: {fecha_registro_}")
 
             marca_ = input("Marca: ").strip().lower()
             modelo_ = input("Modelo: ").strip().lower()

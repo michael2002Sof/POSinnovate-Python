@@ -1,4 +1,5 @@
 from .solicitud import solicitudes_insumos  # Importa solicitudes para verificar cuando inventario las revise
+from datetime import datetime
 
 insumos = []
 
@@ -89,14 +90,8 @@ class Insumo:
                     break
                 print("Unidad inválida, ingresa una unidad de medida permitida.\n")
 
-            while True:
-                fecha_registro_ = input("\nFecha (DD/MM/AAAA): ").strip()
-                partes = fecha_registro_.split("/")
-                if len(partes) == 3 and all(p.isdigit() for p in partes):
-                    d, m, a = map(int, partes)
-                    if 1 <= d <= 31 and 1 <= m <= 12 and a >= 2025:
-                        break
-                print("Fecha inválida.\n")
+            fecha_registro_ = datetime.now().strftime("%d/%m/%Y")
+            print(f"\nFecha de Registro: {fecha_registro_}")
 
             while True:
                 try:
@@ -126,10 +121,11 @@ class Insumo:
                     else:
                         print("El costo inicial debe ser mayor a 0.\n")
                 except ValueError:
-                    print("Costo inválido.\n")
+                    print("Costo inválida.\n")
 
             insumo = Insumo(nombre_, unidad_medida_, stock_actual_, stock_minimo_, fecha_registro_, costo_)
             insumos.append(insumo)
+
 
             print("")
             print("=" * 40)
@@ -247,5 +243,3 @@ def mostrar_resumen_alertas():
         print("=" * 40)
         print(f"{len(alertas)} INSUMO(S) CON STOCK BAJO.")
         print("=" * 40)
-
-

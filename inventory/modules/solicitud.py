@@ -1,3 +1,5 @@
+from datetime import datetime
+
 solicitudes_insumos = []
 
 # ============================================================================================
@@ -23,8 +25,11 @@ class SolicitudInsumo:
         for item in self.items:
             insumo = item["insumo"]
             cantidad = item["cantidad"]
-            txt.append(f"- {insumo.nombre} | Codigo: {insumo.codigo}) - Cantidad Solicitada: {cantidad} {insumo.unidad_medida}")
-            f"\n================================================================\n"
+            txt.append(
+                f"- {insumo.nombre} | Código: {insumo.codigo} - Cantidad Solicitada: {cantidad} {insumo.unidad_medida}"
+            )
+
+        txt.append("================================================================")
         return "\n".join(txt)
 
 # =====================================================================
@@ -39,15 +44,8 @@ def solicitar_insumos(lista_insumos):
         print("=" * 40)
         return
 
-    # Validar fecha
-    while True:
-        fecha_solicitud = input("Fecha solicitud (DD/MM/AAAA): ").strip()
-        p = fecha_solicitud.split("/")
-        if len(p) == 3 and all(x.isdigit() for x in p):
-            d, m, a = map(int, p)
-            if 1 <= d <= 31 and 1 <= m <= 12 and a >= 2025:
-                break
-        print("Fecha inválida.\n")
+    fecha_solicitud = datetime.now().strftime("%d/%m/%Y")
+    print(f"Fecha de Registro: {fecha_solicitud}")
 
     responsable = input("Responsable: ").strip() or "Producción"
     items_solicitados = []
