@@ -1,145 +1,105 @@
-# sale/modules/sale.py
-
-
-from inventory.modules.product import products   # ← IMPORTACIÓN CLAVE
+from datetime import datetime
+from inventory.modules.product import productos
 from .voucher import generar_voucher
-sales_history = []
 
-def register_sale():
-    print("\n--- Registrar Venta ---")
 
-    if not products:
-        print("No hay productos disponibles en inventario para vender.")
+# ===============================================================
+# HISTORIAL GLOBAL DE VENTAS
+# ===============================================================
+
+historial_ventas = []
+
+
+# ===============================================================
+# REGISTRO DE VENTAS (RF 3.1 + RF 3.2)
+# ===============================================================
+
+def registrar_venta():
+    print("\n====================================================")
+    print("              REGISTRO DE VENTA (RF 3.1)")
+    print("====================================================")
+
+
+
+    if not productos:
+        print("\nNO HAY PRODUCTOS REGISTRADOS EN INVENTARIO.\n")
         return
 
-    print("\nProductos disponibles:")
-    for i, p in enumerate(products, start=1):
-        print(f"{i}. {p['nombre']} - ${p['precio_venta']} - Stock: {p['stock']}")
+    carrito = []
+    cantidades = []
+    total = 0
 
-    try:
-        option = int(input("\nSeleccione el producto: "))
-        producto = products[option - 1]
-    except:
-        print("Opción inválida.")
-        return
-
-    cantidad = int(input("Ingrese cantidad a vender: "))
-
-    if cantidad > producto["stock"]:
-        print("No hay suficiente stock.")
-        return
-
-    total = cantidad * producto["precio_venta"]
-
-    # Reducir stock
-    producto["stock"] -= cantidad
-
-    # Registrar venta
-    venta = {
-        "producto": producto["nombre"],
-        "cantidad": cantidad,
-        "precio_unit": producto["precio_venta"],
-        "total": total
-    }
-
-    sales_history.append(venta)
-    
-
-    print("\nVenta registrada con éxito.")
-    print(f"Producto: {venta['producto']}")
-    print(f"Cantidad: {venta['cantidad']}")
-    print(f"Total: ${venta['total']}")
-
-    generar_voucher(venta)     #Aqui es donde la funcion hace su efecto y se crea la factura
+    cliente = input("Nombre del cliente: ").strip()
 
 
-
-def sale_menu():
+    # -------------------------------
+    # SELECCIÓN DE PRODUCTOS
+    # -------------------------------
     while True:
-        print("\n--- Módulo de Ventas ---")
-        print("1. Registrar Venta")
-        print("2. Ver Historial de Ventas")
-        print("0. Volver")
+        print("\n----- PRODUCTOS DISPONIBLES -----")
+        for p in productos:
+            print(f"{p.codigo} - {p.marca} {p.modelo} | Talla {p.talla} | ${p.precio_venta} | Stock: {p.cantidad}")
 
-        option = input("Seleccione una opción: ")
+        try:
+            codigo = int(input("\nDigite el código del producto: "))
+        except ValueError:
+            print("Código inválido.\n")
+            continue
 
-        if option == "1":
-            register_sale()
-        elif option == "2":
-            print("\nHistorial de ventas:")
-            for v in sales_history:
-                print(v)
-        elif option == "0":
+        encontrado = next((p for p in productos if p.codigo == codigo), None)
+
+        if not encontrado:
+            print("Producto no encontrado.\n")
+            continue
+
+        # Cantidad
+        try:
+            cant = int(input("Cantidad a comprar: "))
+        except:
+            print("Cantidad inválida.\n")
+            continue
+
+        if cant <= 0 or cant > encontrado.cantidad:
+            print("Cantidad no disponible.\n")
+            continue
+
+        carrito.append(encontrado)
+        cantidades.append(cant)
+        total += encontrado.precio_venta * cant
+
+        otro = input("¿Agregar otro producto? (SI/NO): ").strip().lower()
+        if otro != "si":
             break
-        else:
-            print("Opción no válida.")
-# sale/modules/sale.py
 
-from inventory.modules.product import products   # ← IMPORTACIÓN CLAVE
+    # -------------------------------
+    # REGISTRAR FECHA
+    # -------------------------------
+    fecha = datetime.now().strftime("%d/%m/%Y")
 
-sales_history = []
+    # -------------------------------
+    # GENERAR VOUCHER (RF 3.2)
+    # -------------------------------
+    voucher_id = generar_voucher(cliente, carrito, cantidades, fecha, total)
 
+    # -------------------------------
+    # GUARDAR EN HISTORIAL
+    # -------------------------------
+    historial_ventas.append({
+        "cliente": cliente,
+        "productos": [f"{p.marca} {p.modelo}" for p in carrito],
+        "cantidad_total": sum(cantidades),
+        "total": total,
+        "fecha": fecha,
+        "estado": "en proceso",
+        "voucher_id": voucher_id
+    })
 
-def register_sale():
-    print("\n--- Registrar Venta ---")
-
-    if not products:
-        print("No hay productos disponibles en inventario para vender.")
-        return
-
-    print("\nProductos disponibles:")
-    for i, p in enumerate(products, start=1):
-        print(f"{i}. {p['nombre']} - ${p['precio_venta']} - Stock: {p['stock']}")
-
-    try:
-        option = int(input("\nSeleccione el producto: "))
-        producto = products[option - 1]
-    except:
-        print("Opción inválida.")
-        return
-
-    cantidad = int(input("Ingrese cantidad a vender: "))
-
-    if cantidad > producto["stock"]:
-        print("No hay suficiente stock.")
-        return
-
-    total = cantidad * producto["precio_venta"]
-
-    # Reducir stock
-    producto["stock"] -= cantidad
-
-    # Registrar venta
-    venta = {
-        "producto": producto["nombre"],
-        "cantidad": cantidad,
-        "precio_unit": producto["precio_venta"],
-        "total": total
-    }
-
-    sales_history.append(venta)
-
-    print("\nVenta registrada con éxito.")
-    print(f"Producto: {venta['producto']}")
-    print(f"Cantidad: {venta['cantidad']}")
-    print(f"Total: ${venta['total']}")
-
-def sale_menu():
-    while True:
-        print("\n--- Módulo de Ventas ---")
-        print("1. Registrar Venta")
-        print("2. Ver Historial de Ventas")
-        print("0. Volver")
-
-        option = input("Seleccione una opción: ")
-
-        if option == "1":
-            register_sale()
-        elif option == "2":
-            print("\nHistorial de ventas:")
-            for v in sales_history:
-                print(v)
-        elif option == "0":
-            break
-        else:
-            print("Opción no válida.")
+    # -------------------------------
+    # CONFIRMACIÓN
+    # -------------------------------
+    print("\n====================================================")
+    print("           ¡VENTA REGISTRADA CON ÉXITO!")
+    print("====================================================")
+    print(f"Total: ${total}")
+    print(f"Voucher generado: {voucher_id}")
+    print("====================================================\n")
