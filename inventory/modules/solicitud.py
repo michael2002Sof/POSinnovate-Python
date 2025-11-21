@@ -17,7 +17,7 @@ class SolicitudInsumo:
     def __str__(self):
         txt = [
             f"================================================================\n"
-            f"Solicitud #{self.codigo} - Fecha: {self.fecha_solicitud}",
+            f"Solicitud {self.codigo} - Fecha: {self.fecha_solicitud}",
             f"Responsable: {self.responsable} | Estado: {self.estado}",
             "Items solicitados:\n",
         ]
@@ -45,7 +45,7 @@ def solicitar_insumos(lista_insumos):
         return
 
     fecha_solicitud = datetime.now().strftime("%d/%m/%Y")
-    print(f"Fecha de Registro: {fecha_solicitud}")
+    print(f"\nFecha de Registro: {fecha_solicitud}")
 
     responsable = input("Responsable: ").strip() or "Producción"
     items_solicitados = []
@@ -128,12 +128,14 @@ def gestionar_solicitudes_inventario():
             print("=" * 40)
             break
 
-        print("\nSolicitudes pendientes:")
+        print("=" * 40)
+        print("SOLICITUDES PENDIENTES:")
         for s in pendientes:
             print(f"{s.codigo} | {s.fecha_solicitud} | {s.responsable} | Items: {len(s.items)}")
+        print("=" * 40)
 
         try:
-            codigo = int(input("\nCódigo a gestionar (0 para volver): "))
+            codigo = int(input("\nCódigo a Gestionar (0 para Regresar): "))
         except:
             print("Código inválido.\n")
             continue
@@ -144,7 +146,7 @@ def gestionar_solicitudes_inventario():
         solicitud = next((s for s in pendientes if s.codigo == codigo), None)
 
         if not solicitud:
-            print("No encontrada.\n")
+            print("¡CODIGO DE SOLICITUD NO ENCONTRADO!\n")
             continue
 
         print(solicitud)
@@ -156,9 +158,9 @@ def gestionar_solicitudes_inventario():
             for insumo, faltante in faltantes:
                 print(f"- {insumo.nombre}: faltan {faltante}")
         else:
-            print("\n!STOCK SUFICIENTE PARA SER APROBADO¡\n")
+            print("\n!STOCK SUFICIENTE PARA SER APROBADO¡")
 
-        print("\nA = Aprobar | R = Rechazar | N = Nada\n")
+        print("\nA = Aprobar | R = Rechazar | N = Nada")
 
         op = input("Opción: ").strip().lower()
 

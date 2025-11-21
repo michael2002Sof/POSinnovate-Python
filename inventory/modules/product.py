@@ -177,6 +177,25 @@ class Producto:
             if cont != "si":
                 break
 
+# =====================================================================
+# PRODUCTOS REGISTRADOS DE FORMA INICIAL
+# =====================================================================
+
+def cargar_productos():
+    if productos:
+        return
+
+    fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+
+    p1 = Producto(fecha_hoy, "nike", "airmax", "deportivo", 40, "negro", 10, 250000)
+    productos.append(p1)
+
+    p2 = Producto(fecha_hoy, "adidas", "runfast", "deportivo", 38, "blanco", 8, 220000)
+    productos.append(p2)
+
+    p3 = Producto(fecha_hoy, "clarks", "classic", "formal", 42, "café", 5, 300000)
+    productos.append(p3)
+
 # ===============================================================
 # CONSULTA DE INSUMOS DESDE PRODUCCIÓN (RF 5.1)
 # ===============================================================

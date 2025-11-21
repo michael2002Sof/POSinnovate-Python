@@ -6,18 +6,30 @@ from .modules.insumo import (
     Insumo,
     mostrar_alertas_stock,
     mostrar_resumen_alertas,
-    insumos
+    insumos,
+    cargar_insumos
 )
 
 from .modules.product import (
     Producto,
-    consultar_insumos_produccion
+    consultar_insumos_produccion,
+    cargar_productos
 )
 
 from .modules.solicitud import (
     solicitar_insumos,
     gestionar_solicitudes_inventario
 )
+
+# ============================================================================================
+# CARGA INICIAL DE INSUMOS Y PRODUCTOS
+# ============================================================================================
+
+def cargar_datos_iniciales():
+    cargar_insumos()
+    cargar_productos()
+
+cargar_datos_iniciales()
 
 # ============================================================================================
 # FUNCION: MENU DE INVENTARIO

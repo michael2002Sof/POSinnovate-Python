@@ -33,6 +33,7 @@ class Insumo:
 # ===================================================================
 # SI EXISTE - MODIFICAR
 # ===================================================================
+
             if insumo_existente is not None:
                 print("=" * 40) 
                 print("ADVERTENCIA:")
@@ -208,6 +209,25 @@ class Insumo:
             f"Cantidad: {self.stock_actual} {self.unidad_medida} - Costo acumulado: ${self.costo}\n"
             "================================================================"
         )
+    
+# =====================================================================
+# INSUMOS REGISTRADOS DE FORMA INICIAL
+# =====================================================================
+
+def cargar_insumos():
+    if insumos:
+        return
+
+    fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+
+    insumo1 = Insumo("super", "litros", 40, 5, fecha_hoy, 75000)
+    insumos.append(insumo1)
+
+    insumo2 = Insumo("suelas", "unidades", 80, 10, fecha_hoy, 48000)
+    insumos.append(insumo2)
+
+    insumo3 = Insumo("malla", "metros", 50, 8, fecha_hoy, 90000)
+    insumos.append(insumo3)
 
 # ============================================================================================
 # FUNCIONES DE ALERTAS (RF 2.3)
