@@ -1,12 +1,8 @@
 #=================================================================================================
-# Lista global de solicitudes de insumos
+# Clase SolicitudInsumo
 #=================================================================================================
 
 solicitudes_insumos = []
-
-#=================================================================================================
-# Clase SolicitudInsumo (RF 5.3)
-#=================================================================================================
 
 class SolicitudInsumo:
     def __init__(self, fecha_solicitud, responsable, items):
@@ -30,9 +26,8 @@ class SolicitudInsumo:
             )
         return "\n".join(texto)
 
-
 #=================================================================================================
-# RF 5.3 – Solicitar insumos necesarios para producción
+# Solicitar insumos necesarios para producción  (RF 5.3)
 #=================================================================================================
 
 def solicitar_insumos(lista_insumos):
@@ -64,7 +59,11 @@ def solicitar_insumos(lista_insumos):
     items_solicitados = []
 
     while True:
-        print("\n--- Agregar insumo a la solicitud ---")
+        print(" ")
+        print("="*40)
+        print("Agregar insumo a la solicitud")
+        print("="*40)
+        print(" ")
 
         # Buscar insumo por código
         try:
@@ -137,13 +136,8 @@ def solicitar_insumos(lista_insumos):
 def obtener_solicitudes_pendientes():
     return [s for s in solicitudes_insumos if s.estado == "pendiente"]
 
-
 def verificar_disponibilidad_solicitud(solicitud):
-    """
-    Devuelve una lista de faltantes.
-    Si está vacía, hay stock suficiente para todos los insumos solicitados.
-    Cada elemento es una tupla: (insumo, faltante)
-    """
+
     faltantes = []
     for item in solicitud.items:
         insumo = item["insumo"]
@@ -153,15 +147,7 @@ def verificar_disponibilidad_solicitud(solicitud):
             faltantes.append((insumo, faltante))
     return faltantes
 
-
 def gestionar_solicitudes_inventario():
-    """
-    Pensado para ser llamado desde el menú del Gestor de Inventario.
-    Permite:
-    - Ver solicitudes pendientes
-    - Seleccionar una
-    - Aprobar (descontando stock) o rechazar
-    """
 
     while True:
         pendientes = obtener_solicitudes_pendientes()
@@ -220,10 +206,10 @@ def gestionar_solicitudes_inventario():
         else:
             print("\nHay stock suficiente para todos los insumos solicitados.\n")
 
-        print("¿Qué deseas hacer con esta solicitud?")
-        print("A = Aprobar y descontar del inventario")
+        print("¿Qué deseas realizar con esta solicitud?")
+        print("A = Aprobar")
         print("R = Rechazar")
-        print("N = No hacer nada y volver a la lista\n")
+        print("N = Regresar\n")
 
         accion = input("Opción (A/R/N): ").strip().lower()
 

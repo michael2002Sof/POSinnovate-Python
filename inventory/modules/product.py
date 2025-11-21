@@ -1,11 +1,11 @@
 from .insumo import insumos
 from .solicitud import solicitar_insumos
 
-productos = []
-
 #=================================================================================================
 # Clase de Productos
 #=================================================================================================
+
+productos = []
 
 class Producto:
     def __init__(self,
@@ -208,7 +208,7 @@ class Producto:
         )
 
 #=================================================================================================
-# RF 5.1 – Consultar insumos registrados en inventario (vista Producción)
+# Consultar insumos registrados en inventario (RF 5.1)
 #=================================================================================================
 
 def consultar_insumos_produccion():
@@ -279,11 +279,11 @@ def menu_produccion():
     while True:
         print("")
         print("=" * 40)
-        print("Módulo de Producción")
+        print("MODULO DE PRODUCCION")
         print("=" * 40)
-        print("1. Registrar productos (RF 5.2)")
-        print("2. Consultar insumos registrados en inventario (RF 5.1)")
-        print("3. Solicitar insumos para producción (RF 5.3)")
+        print("1. Registrar productos.")
+        print("2. Consultar insumos registrados en inventario.")
+        print("3. Solicitar insumos para producción.")
         print("4. Volver al menú principal\n")
 
         opcion = input("Selecciona una opción: ").strip()

@@ -1,10 +1,10 @@
 from .solicitud import gestionar_solicitudes_inventario
 
-insumos = []
-
 #=================================================================================================
 # Clase de Insumos
 #=================================================================================================
+
+insumos = []
 
 class Insumo:
     def __init__(self,
@@ -82,8 +82,6 @@ class Insumo:
                         print(f"Nuevo costo acumulado: ${insumo_existente.costo}")
                         print("="*40)
 
-                        # RF 2.3
-                        mostrar_resumen_alertas()
                         break
 
                     elif opcion_2 == "no":
@@ -163,9 +161,6 @@ class Insumo:
                 print("Insumo registrado correctamente.")
                 print("="*40)
 
-                # RF 2.3
-                mostrar_resumen_alertas()
-
             # Continuar o salir
             continuar = input("¿Deseas registrar otro insumo? (SI/NO): ").strip().lower()
             if continuar != "si":
@@ -188,7 +183,7 @@ class Insumo:
 
             print(" ")
             print("="*40)
-            print("Consulta de Insumos")
+            print("CONSULTA DE INSUMOS")
             print("="*40)
 
             print("1. Buscar por código")
@@ -283,9 +278,7 @@ def mostrar_resumen_alertas():
     alertas = obtener_insumos_en_alerta()
     cantidad = len(alertas)
 
-    if cantidad == 0:
-        print("\nNo hay alertas de stock.\n")
-    else:
+    if cantidad > 0:
         print(f"\nHay {cantidad} insumo(s) con stock bajo.")
         print("Revisa la opcion: Ver alertas de stock bajo.\n")
 
@@ -296,15 +289,18 @@ def mostrar_resumen_alertas():
 
 def menu_inventario():
     while True:
+
+        mostrar_resumen_alertas()
+        
         print("")
         print("="*40)
-        print("Modulo de Inventario")
+        print("MODULO DE INVENTARIO:")
         print("="*40)
 
         print("1. Registrar / Modificar Insumo.")
         print("2. Consultar Insumos.")
         print("3. Ver alertas de stock bajo.")
-        print("4. Gestionar solicitudes de insumos.")  # NUEVA OPCIÓN
+        print("4. Gestionar solicitudes de insumos.")
         print("5. Volver\n")
 
         opcion = input("Selecciona una opción: ").strip()

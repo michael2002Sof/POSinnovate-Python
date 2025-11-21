@@ -4,9 +4,9 @@ from .modules.product import menu_produccion
 def menu_principal():
     while True:
         print("")
-        print("=" * 50)
-        print("POSInnovate - Módulo Inventory")
-        print("=" * 50)
+        print("=" * 40)
+        print("POSInnovate - MODULOS")
+        print("=" * 40)
         print("1. Ingresar como Gestor de Inventario")
         print("2. Ingresar como Gestor de Producción")
         print("3. Salir\n")
