@@ -9,3 +9,6 @@ class User:
     def __str__(self):
         return f"Nombre: {self.name} || Correo: {self.email} || Contraseña: {self.password} || rol: {self.rol} || estado: {self.status}"
     
+
+
+
