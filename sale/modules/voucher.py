@@ -1,65 +1,51 @@
-# ================================================================================================
-# Módulo: voucher.py  (RF 3.2 – Generar voucher digital)
-# ================================================================================================
+# sale/modules/voucher.py
 
-import datetime
-
-# Lista global donde se almacenan todos los vouchers generados
-historial_vouchers = []
+from datetime import datetime
 
 
-def generar_voucher(venta):
-    """
-    Recibe un objeto 'venta' (generado en RF 3.1) y construye el voucher
-    en formato de texto, listo para imprimirse en pantalla o guardarse.
-    """
+class VoucherManager:
+    def __init__(self):
+        self.historial_vouchers = []
 
-    fecha_actual = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    def generar_voucher(self, cliente, carrito, cantidades, fecha, total):
+        voucher_id = f"VCH-{len(self.historial_vouchers)+1:05d}"
 
-    contenido = []
-    contenido.append("\n==============================================")
-    contenido.append("               VOUCHER DE VENTA               ")
-    contenido.append("==============================================")
-    contenido.append(f"Fecha: {fecha_actual}")
-    contenido.append(f"Código de Venta: {venta.codigo}")
-    contenido.append("----------------------------------------------")
-    contenido.append("Cliente:")
-    contenido.append(f"  Nombre: {venta.cliente_nombre}")
-    contenido.append(f"  Identificación: {venta.cliente_id}")
-    contenido.append("----------------------------------------------")
-    contenido.append("Productos:")
+        contenido = [
+            "\n==============================================",
+            "               VOUCHER DE VENTA               ",
+            "==============================================",
+            f"Fecha: {fecha}",
+            f"Código: {voucher_id}",
+            "----------------------------------------------",
+            f"Cliente: {cliente}",
+            "----------------------------------------------",
+            "Productos:",
+        ]
 
-    total_general = 0
+        for p, cant in zip(carrito, cantidades):
+            subtotal = cant * p.precio_venta
+            contenido.append(
+                f"  - {p.marca} {p.modelo} | {cant} und | "
+                f"${p.precio_venta} c/u | Subtotal: ${subtotal}"
+            )
 
-    for item in venta.items:
-        producto = item["producto"]
-        cantidad = item["cantidad"]
-        precio_unit = item["precio_unit"]
-        subtotal = cantidad * precio_unit
-        total_general += subtotal
+        contenido.append("----------------------------------------------")
+        contenido.append(f"TOTAL A PAGAR: ${total}")
+        contenido.append("==============================================")
+        contenido.append("Gracias por su compra.")
+        contenido.append("==============================================\n")
 
-        contenido.append(
-            f"  - {producto.nombre} | {cantidad} und | "
-            f"${precio_unit:,.0f} c/u | Subtotal: ${subtotal:,.0f}"
-        )
+        voucher_text = "\n".join(contenido)
 
-    contenido.append("----------------------------------------------")
-    contenido.append(f"TOTAL A PAGAR: ${total_general:,.0f}")
-    contenido.append("==============================================")
-    contenido.append("Gracias por su compra.")
-    contenido.append("==============================================\n")
+        # Guardamos
+        self.historial_vouchers.append({
+            "voucher_id": voucher_id,
+            "cliente": cliente,
+            "fecha": fecha,
+            "total": total,
+            "voucher_text": voucher_text,
+            "estado": "en proceso"
+        })
 
-    # Convertir lista a texto final
-    voucher_texto = "\n".join(contenido)
-
-    # Guardar en historial para RF 3.3 (seguimiento)
-    historial_vouchers.append({
-        "codigo": venta.codigo,
-        "cliente": venta.cliente_nombre,
-        "fecha": fecha_actual,
-        "voucher": voucher_texto,
-        "estado": venta.estado
-    })
-
-    return voucher_texto
-    
+        print(voucher_text)
+        return voucher_id

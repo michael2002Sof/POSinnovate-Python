@@ -1,87 +1,60 @@
-from ...inventory.modules.product import productos
+# sale/modules/inventary_query.py
+
+from inventory.modules.product import productos
 
 
-# ===============================================================
-# CONSULTAR DISPONIBILIDAD DE PRODUCTOS (RF 3.4)
-# ===============================================================
+class InventarioManager:
+    def consultar_disponibilidad(self):
+        if not productos:
+            print("\n==============================================")
+            print("   ¡NO HAY PRODUCTOS REGISTRADOS!")
+            print("==============================================\n")
+            return
 
-def consultar_disponibilidad():
-    if not productos:
-        print("\n==============================================")
-        print("   ¡NO HAY PRODUCTOS REGISTRADOS EN INVENTARIO!")
-        print("==============================================\n")
-        return
+        while True:
+            print("\n==============================================")
+            print("      CONSULTA DE DISPONIBILIDAD (RF 3.4)")
+            print("==============================================")
+            print("1. Buscar por modelo")
+            print("2. Buscar por marca")
+            print("3. Buscar por categoría")
+            print("4. Ver inventario completo")
+            print("5. Volver")
+            print("==============================================")
 
-    while True:
-        print("\n==============================================")
-        print("      CONSULTA DE DISPONIBILIDAD (RF 3.4)")
-        print("==============================================")
-        print("1. Buscar por nombre (modelo)")
-        print("2. Buscar por marca")
-        print("3. Buscar por categoría (tipo)")
-        print("4. Ver todos los productos")
-        print("5. Volver")
-        print("==============================================")
+            opcion = input("Seleccione una opción: ").strip()
 
-        opcion = input("Seleccione una opción: ").strip()
+            if opcion == "1":
+                modelo = input("Modelo: ").lower()
+                self._mostrar([p for p in productos if modelo in p.modelo.lower()])
 
-        # --------------------------------------------------------
-        # BUSCAR POR MODELO (NOMBRE DEL PRODUCTO)
-        # --------------------------------------------------------
-        if opcion == "1":
-            nombre = input("\nNombre o modelo del producto: ").strip().lower()
-            resultados = [p for p in productos if nombre in p.modelo.lower()]
-            mostrar_resultados(resultados)
+            elif opcion == "2":
+                marca = input("Marca: ").lower()
+                self._mostrar([p for p in productos if p.marca.lower() == marca])
 
-        # --------------------------------------------------------
-        # BUSCAR POR MARCA
-        # --------------------------------------------------------
-        elif opcion == "2":
-            marca = input("\nMarca: ").strip().lower()
-            resultados = [p for p in productos if p.marca.lower() == marca]
-            mostrar_resultados(resultados)
+            elif opcion == "3":
+                tipo = input("Categoría: ").lower()
+                self._mostrar([p for p in productos if p.tipo.lower() == tipo])
 
-        # --------------------------------------------------------
-        # BUSCAR POR TIPO / CATEGORÍA
-        # --------------------------------------------------------
-        elif opcion == "3":
-            tipo = input("\nCategoría / Tipo (deportivo, casual, formal, etc.): ").strip().lower()
-            resultados = [p for p in productos if p.tipo.lower() == tipo]
-            mostrar_resultados(resultados)
+            elif opcion == "4":
+                self._mostrar(productos)
 
-        # --------------------------------------------------------
-        # MOSTRAR TODO EL INVENTARIO
-        # --------------------------------------------------------
-        elif opcion == "4":
-            mostrar_resultados(productos)
+            elif opcion == "5":
+                break
 
-        elif opcion == "5":
-            break
-        else:
-            print("Opción inválida.\n")
+    def _mostrar(self, lista):
+        if not lista:
+            print("\nNo se encontraron productos.\n")
+            return
 
-
-# ===============================================================
-# FUNCIÓN PARA IMPRIMIR RESULTADOS
-# ===============================================================
-
-def mostrar_resultados(lista):
-    if not lista:
-        print("\nNo se encontraron productos con ese criterio.\n")
-        return
-
-    print("\n================== RESULTADOS ==================\n")
-
-    for p in lista:
-        print(f"Código: {p.codigo}")
-        print(f"Marca: {p.marca}")
-        print(f"Modelo: {p.modelo}")
-        print(f"Tipo: {p.tipo}")
-        print(f"Talla: {p.talla}")
-        print(f"Color: {p.color}")
-        print(f"Cantidad disponible: {p.cantidad}")
-        print(f"Precio: ${p.precio_venta}")
-        print(f"Estado: {p.estado}")
-        print("--------------------------------------------------")
-
-    print("==================================================\n")
+        print("\n================== RESULTADOS ==================\n")
+        for p in lista:
+            print(f"Código: {p.codigo}")
+            print(f"Marca: {p.marca}")
+            print(f"Modelo: {p.modelo}")
+            print(f"Tipo: {p.tipo}")
+            print(f"Talla: {p.talla}")
+            print(f"Color: {p.color}")
+            print(f"Cantidad: {p.cantidad}")
+            print(f"Precio: ${p.precio_venta}")
+            print("----------------------------------")

@@ -1,31 +1,40 @@
 # sale/index.py
 
-from .modules.sale import registrar_venta
-from .modules.voucher import generar_voucher
-from .modules.seguimiento import consultar_estado_venta
-from .modules.inventary_query import consultar_inventario_disponible
+from .modules.voucher import VoucherManager
+from .modules.sale import SaleManager
+from .modules.seguimiento import SeguimientoManager
+from .modules.inventary_query import InventarioManager
 
-def sale_menu():
-    while True:
-        print("\n========= MÓDULO DE VENTAS =========")
-        print("1. Registrar venta")
-        print("2. Generar voucher")
-        print("3. Consultar estado de venta")
-        print("4. Consultar inventario disponible")
-        print("5. Volver")
-        print("====================================")
 
-        opcion = input("Seleccione una opción: ").strip()
+class MenuVentas:
+    def __init__(self):
+        self.voucher_manager = VoucherManager()
+        self.sale_manager = SaleManager(self.voucher_manager)
+        self.seguimiento_manager = SeguimientoManager(self.sale_manager)
+        self.inventario_manager = InventarioManager()
 
-        if opcion == "1":
-            registrar_venta()
-        elif opcion == "2":
-            generar_voucher()
-        elif opcion == "3":
-            consultar_estado_venta()
-        elif opcion == "4":
-            consultar_inventario_disponible()
-        elif opcion == "5":
-            break
-        else:
-            print("Opción inválida.\n")
+    def run(self):
+        while True:
+            print("\n========= MÓDULO DE VENTAS =========")
+            print("1. Registrar venta")
+            print("2. Consultar estado de venta")
+            print("3. Consultar inventario")
+            print("4. Volver")
+            print("====================================")
+
+            opcion = input("Seleccione: ").strip()
+
+            if opcion == "1":
+                self.sale_manager.registrar_venta()
+
+            elif opcion == "2":
+                self.seguimiento_manager.consultar_estado_venta()
+
+            elif opcion == "3":
+                self.inventario_manager.consultar_disponibilidad()
+
+            elif opcion == "4":
+                break
+
+            else:
+                print("Opción inválida.\n")
