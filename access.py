@@ -7,7 +7,9 @@ from menu import menu
 def login(system):
     while True:
         clean_screen()
-        print("\n=== SISTEMA POSInnovate ===")
+        print("=" * 40)
+        print("SITEMA POSSinovate")
+        print("=" * 40)
 
         admin_exists = any(user.rol == "admin" for user in system.users)
 
@@ -15,12 +17,14 @@ def login(system):
         if not admin_exists:
             print("2. Registrar Administrador (Primera vez)")
         print("0. Salir")
-
+        print("=" * 40)
         option = input("Seleccione una opción: ")
 
         if option == "1":
             clean_screen()
-            print("\n=== Iniciar Sesion ===")
+            print("=" * 40)
+            print("INICIAR SESION")
+            print("=" * 40)
 
             email = input("Correo: ")
             password = input("Contraseña: ")

@@ -2,20 +2,21 @@ from utils.system_utils import clean_screen
 
 def menu(system, user, role):
     clean_screen()
-    print(f"\nBienvenido {user.name}. Rol: {role.name}")
-    print("=== MENÚ DISPONIBLE ===")
+    print(f"\nBIENVENIDO: {user.name}. ROL: {role.name}")
+    print("=" * 40)
+    print("MENÚ DISPONIBLE")
 
     while True:
 
         modules = role.modules   # Diccionario: { "Usuarios": ["Crear Usuario",...] }
-
-        print("\n--- Módulos disponibles ---")
+        print("MODULOS DISPONIBLES")
+        print("=" * 40)
         for i, module in enumerate(modules.keys(), start=1):
             print(f"{i}. {module}")
 
         print("0. Cerrar sesión")
-
-        choice = input("\nSeleccione un módulo: ")
+        print("=" *40)
+        choice = input("Seleccione un módulo: ")
 
         if choice == "0":
             break
@@ -25,18 +26,23 @@ def menu(system, user, role):
             permissions = modules[module_name]
 
             clean_screen()
-            print(f"\n--- Permisos del modulo {module_name} ---")
+            print("=" * 40)
+            print(f"PERMISOS DEL MODULO {module_name}")
+            print("=" * 40)
 
             # Mostrar acciones permitidas
             for j, perm in enumerate(permissions, start=1):
                 print(f"{j}. {perm}")
 
+            print("=" * 40)
             action = input("Seleccione acción: ")
 
             perm_name = permissions[int(action) - 1]
 
             clean_screen()
-            print(f"\n=== Ejecutando '{perm_name}' en módulo '{module_name}' ===")
+            print("=" * 50)
+            print(f"EJECUTANDO '{perm_name}' EN MODULO '{module_name}'")
+            print("=" * 50)
             # Ejecutar acción si existe
             action_function = system.AVAILABLE_MODULES[module_name].get(perm_name)
 

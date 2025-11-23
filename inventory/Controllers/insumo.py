@@ -1,52 +1,46 @@
-from .solicitud import solicitudes_insumos  # Importa solicitudes para verificar cuando inventario las revise
 from datetime import datetime
+from inventory.models.insumo import Insumo
 
-insumos = []
-
-# ============================================================================================
-# CLASE INSUMO
-# ============================================================================================
-
-class Insumo:
-    def __init__(self, nombre, unidad_medida, stock_actual, stock_minimo, fecha_registro, costo):
-        self.codigo = len(insumos) + 1001
-        self.nombre = nombre
-        self.unidad_medida = unidad_medida
-        self.stock_actual = stock_actual
-        self.stock_minimo = stock_minimo
-        self.fecha_registro = fecha_registro
-        self.costo = costo
+class InsumoController:
+    def __init__(self, system):
+        self.system = system
 
 # ============================================================================================
 # REGISTRO / MODIFICACIÓN DE INSUMO (RF 2.1)
 # ============================================================================================
 
-    def registrar_insumos():
+    def registrar_insumos(self):
         unidades_validas = ["litros", "metros", "unidad", "unidades"]
 
         while True:
             nombre_ = input("\nIngresa el nombre del insumo: ").strip().lower()
 
             # Verificar si existe
-            insumo_existente = next((i for i in insumos if i.nombre == nombre_), None)
+            insumo_existente = next(
+                (i for i in self.system.supply if i.nombre == nombre_), None
+            )
 
 # ===================================================================
 # SI EXISTE - MODIFICAR
 # ===================================================================
 
             if insumo_existente is not None:
-                print("=" * 40) 
+                print("=" * 40)
                 print("ADVERTENCIA:")
                 print(f"El insumo '{nombre_}' ya está REGISTRADO.")
                 print("=" * 40)
 
                 while True:
-                    opcion = input("\n¿Desea modificar cantidad y costo? (SI/NO): ").strip().lower()
+                    opcion = input(
+                        "\n¿Desea modificar cantidad y costo? (SI/NO): "
+                    ).strip().lower()
 
                     if opcion == "si":
                         while True:
                             try:
-                                cantidad_nueva = float(input("Cantidad a agregar: "))
+                                cantidad_nueva = float(
+                                    input("Cantidad a agregar: ")
+                                )
                                 if cantidad_nueva > 0:
                                     break
                                 print("Cantidad inválida.\n")
@@ -66,9 +60,9 @@ class Insumo:
                         insumo_existente.costo += costo_nuevo
 
                         print("")
-                        print("=" * 40) 
+                        print("=" * 40)
                         print("¡INSUMO ACTUALIZADO CORRECTAMENTE!")
-                        print("=" * 40) 
+                        print("=" * 40)
                         print("")
                         break
 
@@ -86,10 +80,14 @@ class Insumo:
 # ===================================================================
 
             while True:
-                unidad_medida_ = input("Unidad de medida (Litros/Metros/Unidad/Unidades): ").strip().lower()
+                unidad_medida_ = input(
+                    "Unidad de medida (Litros/Metros/Unidad/Unidades): "
+                ).strip().lower()
                 if unidad_medida_ in unidades_validas:
                     break
-                print("Unidad inválida, ingresa una unidad de medida permitida.\n")
+                print(
+                    "Unidad inválida, ingresa una unidad de medida permitida.\n"
+                )
 
             fecha_registro_ = datetime.now().strftime("%d/%m/%Y")
             print(f"\nFecha de Registro: {fecha_registro_}")
@@ -124,9 +122,17 @@ class Insumo:
                 except ValueError:
                     print("Costo inválida.\n")
 
-            insumo = Insumo(nombre_, unidad_medida_, stock_actual_, stock_minimo_, fecha_registro_, costo_)
-            insumos.append(insumo)
-
+            codigo = len(self.system.supply) + 1001
+            insumo = Insumo(
+                codigo,
+                nombre_,
+                unidad_medida_,
+                stock_actual_,
+                stock_minimo_,
+                costo_,
+                fecha_registro_,
+            )
+            self.system.supply.append(insumo)
 
             print("")
             print("=" * 40)
@@ -141,8 +147,8 @@ class Insumo:
 # CONSULTA DE INSUMOS (RF 2.2)
 # ============================================================================================
 
-    def consultar_insumos():
-        if not insumos:
+    def consultar_insumos(self):
+        if not self.system.supply:
             print("")
             print("=" * 40)
             print("¡NO HAY INSUMOS REGISTRADOS!")
@@ -161,16 +167,20 @@ class Insumo:
             print("=" * 40)
             print("")
 
-            opcion = input("Ingresa la opcion que deseas realizar: ").strip()
+            opcion = input(
+                "Ingresa la opcion que deseas realizar: "
+            ).strip()
 
             if opcion == "1":
                 try:
                     c = int(input("Código: "))
-                except:
+                except ValueError:
                     print("Código inválido.")
                     continue
 
-                encontrado = next((i for i in insumos if i.codigo == c), None)
+                encontrado = next(
+                    (i for i in self.system.supply if i.codigo == c), None
+                )
 
                 if encontrado:
                     print(encontrado)
@@ -179,7 +189,11 @@ class Insumo:
 
             elif opcion == "2":
                 nombre = input("Nombre: ").strip().lower()
-                encontrados = [i for i in insumos if nombre in i.nombre]
+                encontrados = [
+                    i
+                    for i in self.system.supply
+                    if nombre in i.nombre
+                ]
 
                 if encontrados:
                     for i in encontrados:
@@ -188,7 +202,7 @@ class Insumo:
                     print("¡INSUMO NO ENCONTRADO!")
 
             elif opcion == "3":
-                for i in insumos:
+                for i in self.system.supply:
                     print(i)
 
             elif opcion == "4":
@@ -198,68 +212,83 @@ class Insumo:
                 print("Opción inválida.")
 
 # ============================================================================================
-# METODO DE IMPRESION
+# FUNCIONES DE ALERTAS (RF 2.3)
 # ============================================================================================
 
-    def __str__(self):
-        return (
-            f"\n================================================================\n"
-            f"Fecha: {self.fecha_registro}\n"
-            f"Código: {self.codigo} | Nombre: {self.nombre}\n"
-            f"Cantidad: {self.stock_actual} {self.unidad_medida} - Costo acumulado: ${self.costo}\n"
-            "================================================================"
-        )
-    
+    def mostrar_alertas_stock(self):
+        alertas = [
+            i
+            for i in self.system.supply
+            if i.stock_actual <= i.stock_minimo
+        ]
+
+        if not alertas:
+            print("")
+            print("=" * 40)
+            print("!NO HAY ALERTAS DE STOCK BAJO¡")
+            print("=" * 40)
+            return
+
+        print("")
+        print("=" * 40)
+        print("ALERTAS DE STOCK BAJO")
+        for i in alertas:
+            print(
+                f"[{i.codigo}] {i.nombre} | Stock: {i.stock_actual} / Mínimo: {i.stock_minimo}"
+            )
+        print("=" * 40)
+
+    def mostrar_resumen_alertas(self):
+        alertas = [
+            i
+            for i in self.system.supply
+            if i.stock_actual <= i.stock_minimo
+        ]
+        if alertas:
+            print("")
+            print("=" * 40)
+            print(f"{len(alertas)} INSUMO(S) CON STOCK BAJO.")
+            print("=" * 40)
+
 # =====================================================================
 # INSUMOS REGISTRADOS DE FORMA INICIAL
 # =====================================================================
 
-def cargar_insumos():
-    if insumos:
-        return
+    def cargar_insumos_iniciales(self):
+        if self.system.supply:
+            return
 
-    fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+        fecha_hoy = datetime.now().strftime("%d/%m/%Y")
 
-    insumo1 = Insumo("super", "litros", 40, 5, fecha_hoy, 75000)
-    insumos.append(insumo1)
+        insumo1 = Insumo(
+            len(self.system.supply) + 1001,
+            "super",
+            "litros",
+            40,
+            5,
+            75000,
+            fecha_hoy,
+        )
+        self.system.supply.append(insumo1)
 
-    insumo2 = Insumo("suelas", "unidades", 80, 10, fecha_hoy, 48000)
-    insumos.append(insumo2)
+        insumo2 = Insumo(
+            len(self.system.supply) + 1001,
+            "suelas",
+            "unidades",
+            80,
+            10,
+            48000,
+            fecha_hoy,
+        )
+        self.system.supply.append(insumo2)
 
-    insumo3 = Insumo("malla", "metros", 50, 8, fecha_hoy, 90000)
-    insumos.append(insumo3)
-
-# ============================================================================================
-# FUNCIONES DE ALERTAS (RF 2.3)
-# ============================================================================================
-
-def insumo_en_alerta(insumo):
-    return insumo.stock_actual <= insumo.stock_minimo
-
-def obtener_insumos_en_alerta():
-    return [i for i in insumos if insumo_en_alerta(i)]
-
-def mostrar_alertas_stock():
-    alertas = obtener_insumos_en_alerta()
-
-    if not alertas:
-        print("")
-        print("=" * 40)
-        print("!NO HAY ALERTAS DE STOCK BAJO¡")
-        print("=" * 40)
-        return
-
-    print("")
-    print("=" * 40)
-    print("ALERTAS DE STOCK BAJO")
-    for i in alertas:
-        print(f"[{i.codigo}] {i.nombre} | Stock: {i.stock_actual} / Mínimo: {i.stock_minimo}")
-    print("=" * 40)
-
-def mostrar_resumen_alertas():
-    alertas = obtener_insumos_en_alerta()
-    if alertas:
-        print("")
-        print("=" * 40)
-        print(f"{len(alertas)} INSUMO(S) CON STOCK BAJO.")
-        print("=" * 40)
+        insumo3 = Insumo(
+            len(self.system.supply) + 1001,
+            "malla",
+            "metros",
+            50,
+            8,
+            90000,
+            fecha_hoy,
+        )
+        self.system.supply.append(insumo3)

@@ -4,7 +4,9 @@ class UserController:
 
     # Registrar usuario ADMIN con todos los permisos
     def register_admin(self):
-        print("\n--- Registrar Usuario Administrador ---")
+        print("=" * 40)
+        print("REGISTRO DE USUARIO ADMINISTRADOR")
+        print("=" * 40)
 
         # ¿Existe el rol admin?
         admin_role = next((r for r in self.system.roles if r.name == "admin"), None)
@@ -17,43 +19,35 @@ class UserController:
             }
             admin_role = self.system.model_rol("admin", full_permissions)
             self.system.roles.append(admin_role)
-            print("✓ Rol 'admin' creado automáticamente con todos los permisos.")
+            print("Rol admin creado con todos los permisos.")
 
         # Datos del admin
-        name = input("Nombre del admin: ")
-        email = input("Correo del admin: ")
-        password = input("Contraseña del admin: ")
-
+        name = input("\nNombre del Admin: ")
+        email = input("Correo del Admin: ")
+        password = input("Contraseña del Admin: ")
 
         # Crear usuario
         user = self.system.model_user(name, email, password, admin_role.name)
         self.system.users.append(user)
 
-        print(f"\n✓ Usuario administrador '{name}' registrado correctamente\n")
-
-
-
-
-
-
-
-
-
-
+        print(f"\nUSUARIO ADMINISTRADOR '{name}' REGISTRADO CORRECTAMENTE\n")
 
     # Registrar usuario
     def create_user(self):
         if not self.system.roles:
-            print("No hay roles registrados. Registre un rol primero.")
+            print("!ADVERTENCIA¡ No hay roles registrados. Registre un rol primero.")
             return
         
         name = input("Nombre del usuario: ")
         email = input("Correo del usuario: ")
         password = input("Contraseña del usuario: ")
 
-        print("\nSeleccione un rol:")
+        print("=" * 40)
+        print("SELECCION DE ROL:")
+        print("=" * 40)
         for i, rol in enumerate(self.system.roles):
             print(f"{i+1}. {rol}")
+        print("=" * 40)
 
         try:
             rol_index = int(input("Opción: ")) - 1
@@ -69,9 +63,7 @@ class UserController:
         user = self.system.model_user(name, email, password, selected_role.name)
         self.system.users.append(user)
 
-        print(f"\n✓ Usuario '{name}' registrado correctamente\n")
-
-
+        print(f"\n USUARIO '{name}' REGISTRADO CORRECTAMENTE\n")
 
     # Listar usuarios
     def list_users(self):
@@ -79,7 +71,9 @@ class UserController:
             print("No hay usuarios registrados.")
             return
         
-        print("\n--- Lista de Usuarios ---")
+        print("=" * 40)
+        print("LISTA DE USUARIOS")
+        print("=" * 40)
         for u in self.system.users:
             print(u)
 
