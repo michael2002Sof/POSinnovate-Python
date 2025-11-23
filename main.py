@@ -4,6 +4,8 @@ from customer.index import customer_menu
 from inventory.index import inventory_menu
 from sale.index import sale_menu
 from user.index import user_menu
+from finance.index import finance_menu
+
 
 def main_menu():
     while True:
@@ -12,6 +14,8 @@ def main_menu():
         print("2. Inventory (Inventario)")
         print("3. Sale (Ventas)")
         print("4. User (Usuarios)")
+        print("5. Finance (Finanzas)")
+
         print("0. Salir")
 
         option = input("Seleccione una opción: ")
@@ -24,6 +28,8 @@ def main_menu():
             sale_menu()
         elif option == "4":
             user_menu()
+        elif option == "5":
+            finance_menu()
         elif option == "0":
             print("Saliendo del sistema...")
             break
