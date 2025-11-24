@@ -12,6 +12,10 @@ from inventory.Controllers.insumo import InsumoController
 from inventory.Controllers.product import ProductController
 from inventory.Controllers.solicitud import SolicitudController
 
+# ------------------ VENTAS ------------------
+from sale.controllers.sale import SaleController
+
+
 class System:
     def __init__(self):
 
@@ -35,6 +39,9 @@ class System:
         self.controller_product = ProductController(self)
         self.controller_solicitud = SolicitudController(self)
 
+        # Controlador de ventas
+        self.controller_sale = SaleController(self)
+
         # CARGUE DE INSUMOS, PRODUCTOS INICIALES
         self.controller_insumo.cargar_insumos_iniciales()
         self.controller_product.cargar_productos_iniciales()
@@ -57,10 +64,11 @@ class System:
                 "Gestionar Solicitudes": lambda: self.controller_solicitud.gestionar_solicitudes_inventario(),
             },
             "Ventas": {
-                "crear": lambda: print("Crear venta..."),
-                "anular": lambda: print("Anular venta..."),
+                "Registrar Venta": lambda: self.controller_sale.registrar_venta(),
+                "Consultar Productos (Ventas)": lambda: self.controller_sale.consultar_productos_disponibles(),
             },
         }
+
 
 # EJECUCIÓN DEL SISTEMA
 if __name__ == "__main__":
