@@ -7,27 +7,31 @@ POSinnovate Python
 
 
 ARQUITECTURA MVC (Model – Controller – View simulada vía CLI)
+
 POSINNOVATE-PYTHON/
 
     ├── main.py             → menú principal interactivo.
     ├── README.md           → explicación completa de la estructura y flujo del programa.
 
 inventory/                  → Módulo de inventarios
-    ├── Controllers        
-        └── insumo.py       
-        └── product.py
-        └── solicitud.py
+
+    ├── Controllers/        
+        ├── insumo.py       
+        ├── product.py
+        ├── solicitud.py
     └── Models
         └── insumo.py       → Modelo de Insumo
         └── product.py      → Modelo de Producto
         └── solicitud.py    → Modelo de Solicitud de Insumos
 
 sale/                        → Módulo de ventas
+
     ├── Controllers         
     └── modules/
 
 
 user/                       → Módulo de usuarios
+
     ├── Controllers        
         └── rol.py          → Lógica de roles del sistema
         └── user.py         → Lógica de gestión de usuarios
@@ -36,6 +40,7 @@ user/                       → Módulo de usuarios
         └── user.py
 
 utils/
+
     └── system_utils.py
 
 
