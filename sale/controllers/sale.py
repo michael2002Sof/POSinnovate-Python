@@ -1,17 +1,14 @@
 from datetime import datetime
-
 from sale.models.sale import Sale, SaleItem
-
 
 class SaleController:
     def __init__(self, system):
         self.system = system
 
     # ===============================================================
-    # RF 3.1 - Registrar una venta de productos asociada a un cliente
-    # (y RF 3.2 - Generar voucher al momento de registrar)
+    # RF 3.1 - Registrar venta de productos
+    # RF 3.2 - Generar voucher automáticamente
     # ===============================================================
-
     def registrar_venta(self):
         if not self.system.product:
             print("")
@@ -52,7 +49,7 @@ class SaleController:
                 print("Producto sin stock disponible.")
                 continue
 
-            print(producto)  # muestra detalle del producto
+            print(producto)
 
             while True:
                 try:
@@ -64,13 +61,12 @@ class SaleController:
                 except ValueError:
                     print("Cantidad inválida.")
 
-            # crear item de venta con el precio actual del producto
+            # Crear item de venta
             item = SaleItem(producto, cantidad, producto.precio_venta)
             items.append(item)
 
             # ¿Agregar otro producto?
-            mas = input("¿Agregar otro producto? (SI/NO): ").strip().lower()
-            if mas != "si":
+            if input("¿Agregar otro producto? (SI/NO): ").strip().lower() != "si":
                 break
 
         if not items:
@@ -96,13 +92,15 @@ class SaleController:
         code = len(self.system.sales) + 7001
         date = datetime.now().strftime("%d/%m/%Y %H:%M")
 
+        # Crear la venta completa
         venta = Sale(code, date, customer_name, items, payment_method)
 
-        # Descontar stock de productos
+        # Descontar stock
         for item in items:
             item.product.cantidad -= item.quantity
             item.product.estado = "disponible" if item.product.cantidad > 0 else "agotado"
 
+        # Guardar la venta
         self.system.sales.append(venta)
 
         print("")
@@ -110,18 +108,23 @@ class SaleController:
         print("¡VENTA REGISTRADA CORRECTAMENTE!")
         print("=" * 60)
 
-        # RF 3.2 - Mostrar voucher automáticamente
+        # Registrar ingreso en Finanzas ------------
+        if hasattr(self.system, "controller_finance"):
+            self.system.controller_finance.registrar_ingreso_venta(venta)
+
+        # Mostrar voucher automático
         self.mostrar_voucher(venta)
 
+    # ===============================================================
+    # RF 3.2 - Mostrar voucher
+    # ===============================================================
     def mostrar_voucher(self, venta):
         print("")
         print(venta)
 
     # ===============================================================
-    # RF 3.3 - Consultar disponibilidad de productos en inventario
-    # (igual estilo que ver insumos)
+    # RF 3.3 - Consultar productos disponibles
     # ===============================================================
-
     def consultar_productos_disponibles(self):
         if not self.system.product:
             print("")
@@ -151,15 +154,15 @@ class SaleController:
                     print("Código inválido.")
                     continue
 
-                encontrado = next((p for p in self.system.product if p.codigo == c), None)
+                encontrado = next(
+                    (p for p in self.system.product if p.codigo == c),
+                    None
+                )
 
-                if encontrado:
-                    print(encontrado)
-                else:
-                    print("¡PRODUCTO NO ENCONTRADO!")
+                print(encontrado if encontrado else "¡PRODUCTO NO ENCONTRADO!")
 
             elif opcion == "2":
-                texto = input("Texto a buscar (marca/modelo/tipo): ").strip().lower()
+                texto = input("Texto a buscar: ").strip().lower()
                 encontrados = [
                     p for p in self.system.product
                     if texto in p.marca
@@ -168,8 +171,7 @@ class SaleController:
                 ]
 
                 if encontrados:
-                    for p in encontrados:
-                        print(p)
+                    for p in encontrados: print(p)
                 else:
                     print("¡NO SE ENCONTRARON PRODUCTOS!")
 
