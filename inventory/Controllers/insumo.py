@@ -1,5 +1,5 @@
 from datetime import datetime
-from inventory.models.insumo import Insumo
+from ..models.insumo import Insumo
 
 class InsumoController:
     def __init__(self, system):
@@ -59,6 +59,13 @@ class InsumoController:
                         insumo_existente.stock_actual += cantidad_nueva
                         insumo_existente.costo += costo_nuevo
 
+                        # Registrar gasto LIMPIO
+                        if hasattr(self.system, "controller_finance"):
+                            self.system.controller_finance.registrar_gasto_insumo(
+                                insumo_existente,
+                                costo_nuevo
+                            )
+
                         print("")
                         print("=" * 40)
                         print("¡INSUMO ACTUALIZADO CORRECTAMENTE!")
@@ -69,6 +76,9 @@ class InsumoController:
                     elif opcion == "no":
                         print("¡NO SE MODIFICO EL INSUMO!.\n")
                         break
+
+                    else:
+                        print("Opción inválida. Responda SI o NO.\n")
 
                 cont = input("¿Registrar otro? (SI/NO): ").strip().lower()
                 if cont != "si":
@@ -133,6 +143,13 @@ class InsumoController:
                 fecha_registro_,
             )
             self.system.supply.append(insumo)
+
+            # Registrar gasto LIMPIO
+            if hasattr(self.system, "controller_finance"):
+                self.system.controller_finance.registrar_gasto_insumo(
+                    insumo,
+                    costo_
+                )
 
             print("")
             print("=" * 40)
@@ -260,35 +277,26 @@ class InsumoController:
 
         fecha_hoy = datetime.now().strftime("%d/%m/%Y")
 
-        insumo1 = Insumo(
-            len(self.system.supply) + 1001,
-            "super",
-            "litros",
-            40,
-            5,
-            75000,
-            fecha_hoy,
-        )
-        self.system.supply.append(insumo1)
+        def crear_insumo_inicial(nombre, unidad, stock, minimo, costo):
+            codigo = len(self.system.supply) + 1001
+            insumo = Insumo(
+                codigo,
+                nombre,
+                unidad,
+                stock,
+                minimo,
+                costo,
+                fecha_hoy,
+            )
+            self.system.supply.append(insumo)
 
-        insumo2 = Insumo(
-            len(self.system.supply) + 1001,
-            "suelas",
-            "unidades",
-            80,
-            10,
-            48000,
-            fecha_hoy,
-        )
-        self.system.supply.append(insumo2)
+            # Registrar gasto LIMPIO
+            if hasattr(self.system, "controller_finance"):
+                self.system.controller_finance.registrar_gasto_insumo(
+                    insumo,
+                    costo
+                )
 
-        insumo3 = Insumo(
-            len(self.system.supply) + 1001,
-            "malla",
-            "metros",
-            50,
-            8,
-            90000,
-            fecha_hoy,
-        )
-        self.system.supply.append(insumo3)
+        crear_insumo_inicial("super", "litros", 40, 5, 75000)
+        crear_insumo_inicial("suelas", "unidades", 80, 10, 48000)
+        crear_insumo_inicial("malla", "metros", 50, 8, 90000)

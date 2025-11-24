@@ -78,7 +78,6 @@ class System:
             },
         }
 
-
 # EJECUCIÓN DEL SISTEMA
 if __name__ == "__main__":
     system = System()
