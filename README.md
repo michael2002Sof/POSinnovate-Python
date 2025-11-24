@@ -161,3 +161,68 @@ Daniel Palencia
     * Integración futura con módulo financiero completo
     * Gestión de métodos de pago
     * Reportes y estadísticas
+
+    ## Gestión de Ventas (Módulo Sale)
+
+    # RF 3.1 – Registrar Venta
+    - Registro completo de ventas desde el POS.
+    - Valida disponibilidad de productos mediante el inventario.
+    - Calcula subtotal, impuestos y total.
+    - Descarga stock automáticamente al confirmar.
+
+    # RF 3.2 – Generar Comprobante de Venta (Voucher)
+    Genera un comprobante de venta con:
+    - Productos vendidos
+    - Método de pago
+    - Totales
+    - Fecha y datos relevantes
+
+    Incluye visualización inmediata y almacenamiento interno.
+
+    # RF 3.3 – Consultar Disponibilidad de Productos
+    - Consulta en tiempo real del stock disponible.
+    - Acceso directo a `system.product`.
+
+    # RF 3.4 – Historial de Ventas
+    - Lista completa de ventas realizadas.
+    - Filtros por fecha, cliente, método de pago o vendedor.
+    - Vista detallada de cada transacción.
+
+    # RF 3.5 – Gestión de Métodos de Pago
+    Soporte para:
+    - Efectivo
+    - Transferencia
+    - Tarjeta
+    - Pago mixto
+
+    Registra internamente cada método y su transacción asociada.
+
+    ---
+
+    ## Gestión Financiera (Módulo Finance)
+
+    # RF 4.1 – Visualizar Transacciones Económicas
+    - Lista de ingresos y egresos generados en el sistema.
+    - Filtros avanzados por fecha, tipo o monto.
+
+    # RF 4.2 – Reporte de Gastos
+    - Registro detallado de gastos operativos.
+    - Visualización por categoría, fecha y monto.
+
+    # RF 4.3 – Reporte Financiero Completo
+    Resumen general del estado financiero:
+    - Ingresos totales
+    - Egresos totales
+    - Utilidad neta
+
+    Base para auditoría y análisis económico.
+
+    # RF 4.4 – Historial de Pagos
+    - Historial completo de pagos asociados a ventas.
+    - Incluye método de pago, monto, estado y fecha.
+
+    # RF 4.5 – Exportación de Datos
+    Exportación a PDF y Excel de:
+    - Transacciones
+    - Gastos
+    - Reportes financieros
