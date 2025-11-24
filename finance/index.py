@@ -1,78 +1,70 @@
-from .transactions import add_transaction, show_transactions
-from .history import (
-    show_history,
-    history_by_type,
-    history_by_date,
-    history_by_range
-)
+import json
+import os
+from datetime import datetime
+from typing import List, Dict, Any
 
-# ============================================================
-#                      MENÚ FINANZAS
-# ============================================================
-def finance_menu():
-    while True:
-        print("\n===== MÓDULO FINANZAS =====")
-        print("1. Registrar transacción (Ingreso/Egreso)")
-        print("2. Ver todas las transacciones")
-        print("3. Historial completo")
-        print("4. Historial por tipo (Ingresos/Egresos)")
-        print("5. Historial por fecha exacta")
-        print("6. Historial por rango de fechas")
-        print("0. Volver al menú principal")
 
-        opcion = input("Seleccione una opción: ")
+class TransactionRepository:
 
-        # ------------------------------------------
-        # 1. Registrar transacción
-        # ------------------------------------------
-        if opcion == "1":
-            tipo = input("Tipo (ingreso/egreso): ").lower()
-            monto = float(input("Monto: "))
-            descripcion = input("Descripción: ")
+    def __init__(self):
+        # Ruta del archivo JSON
+        self.DATA_FILE = os.path.join(os.path.dirname(__file__), "data.json")
+        self._ensure_data_file()
 
-            add_transaction(tipo, monto, descripcion)
-            print("\nTransacción registrada correctamente.\n")
+    # -------------------------------------------------------------
+    #  Asegurar que el archivo JSON existe
+    # -------------------------------------------------------------
+    def _ensure_data_file(self):
+        if not os.path.exists(self.DATA_FILE):
+            with open(self.DATA_FILE, "w", encoding="utf-8") as f:
+                json.dump({"transactions": []}, f, indent=4)
 
-        # ------------------------------------------
-        # 2. Ver todas las transacciones
-        # ------------------------------------------
-        elif opcion == "2":
-            show_transactions()
+    # -------------------------------------------------------------
+    #  Cargar datos desde JSON
+    # -------------------------------------------------------------
+    def _load_data(self) -> Dict[str, Any]:
+        self._ensure_data_file()
+        with open(self.DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
 
-        # ------------------------------------------
-        # 3. Historial completo
-        # ------------------------------------------
-        elif opcion == "3":
-            show_history()
+    # -------------------------------------------------------------
+    #  Guardar datos en JSON
+    # -------------------------------------------------------------
+    def _save_data(self, data: Dict[str, Any]):
+        with open(self.DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
 
-        # ------------------------------------------
-        # 4. Historial por tipo
-        # ------------------------------------------
-        elif opcion == "4":
-            tipo = input("Ingrese tipo (ingreso/egreso): ").lower()
-            history_by_type(tipo)
+    # -------------------------------------------------------------
+    #  Obtener el siguiente ID automático
+    # -------------------------------------------------------------
+    def _get_next_id(self, transactions: List[Dict[str, Any]]) -> int:
+        return max((t["id"] for t in transactions), default=0) + 1
 
-        # ------------------------------------------
-        # 5. Historial por fecha
-        # ------------------------------------------
-        elif opcion == "5":
-            fecha = input("Ingrese la fecha (YYYY-MM-DD): ")
-            history_by_date(fecha)
+    # -------------------------------------------------------------
+    #  Registrar una nueva transacción (ingreso o egreso)
+    # -------------------------------------------------------------
+    def add_transaction(self, tipo: str, monto: float, descripcion: str) -> Dict[str, Any]:
+        data = self._load_data()
+        transactions = data["transactions"]
 
-        # ------------------------------------------
-        # 6. Historial por rango
-        # ------------------------------------------
-        elif opcion == "6":
-            inicio = input("Fecha de inicio (YYYY-MM-DD): ")
-            fin = input("Fecha final (YYYY-MM-DD): ")
-            history_by_range(inicio, fin)
+        nuevo_id = self._get_next_id(transactions)
 
-        # ------------------------------------------
-        # 0. Salir
-        # ------------------------------------------
-        elif opcion == "0":
-            print("\nRegresando al menú principal...\n")
-            break
+        nueva_transaccion = {
+            "id": nuevo_id,
+            "tipo": tipo.lower(),
+            "monto": float(monto),
+            "descripcion": descripcion,
+            "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
 
-        else:
-            print("Opción no válida. Intente de nuevo.")
+        transactions.append(nueva_transaccion)
+        self._save_data(data)
+
+        return nueva_transaccion
+
+    # -------------------------------------------------------------
+    #  Obtener todas las transacciones
+    # -------------------------------------------------------------
+    def get_all_transactions(self) -> List[Dict[str, Any]]:
+        data = self._load_data()
+        return data["transactions"]

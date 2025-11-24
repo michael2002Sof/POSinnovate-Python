@@ -1,3 +1,11 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "id": 1,
+      "tipo": "ingreso",
+      "monto": 1500.0,
+      "descripcion": "Pago de prueba",
+      "fecha": "2025-02-17 14:30:00"
+    }
+  ]
 }
