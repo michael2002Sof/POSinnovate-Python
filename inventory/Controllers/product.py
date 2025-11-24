@@ -201,7 +201,7 @@ class ProductController:
             40,
             "negro",
             40,
-            250000,
+            60000,
         )
         self.system.product.append(p1)
 
@@ -214,7 +214,7 @@ class ProductController:
             38,
             "blanco",
             60,
-            220000,
+            48000,
         )
         self.system.product.append(p2)
 
@@ -227,7 +227,7 @@ class ProductController:
             42,
             "café",
             50,
-            300000,
+            55000,
         )
         self.system.product.append(p3)
 
