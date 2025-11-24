@@ -15,17 +15,21 @@ from inventory.Controllers.solicitud import SolicitudController
 # ------------------ VENTAS ------------------
 from sale.controllers.sale import SaleController
 
+# ------------------ FINANZAS ------------------
+from finance.controllers.finance import FinanceController
+
 
 class System:
     def __init__(self):
 
         #   LISTAS DEL SISTEMA
-        self.users = []           # Usuarios del sistema
-        self.roles = []           # Roles del sistema
-        self.product = []         # Productos del sistema
-        self.supply = []          # Insumos del sistema
-        self.requisitions = []    # Requisiciones del sistema
-        self.sales = []           # Ventas del sistema
+        self.users = []                 # Usuarios del sistema
+        self.roles = []                 # Roles del sistema
+        self.product = []               # Productos del sistema
+        self.supply = []                # Insumos del sistema
+        self.requisitions = []          # Requisiciones del sistema
+        self.sales = []                 # Ventas del sistema
+        self.financial_movements = []   # Movimientos financieros (RF 4.x)
 
         #   MODELOS (clases)
         self.model_user = User
@@ -39,8 +43,8 @@ class System:
         self.controller_product = ProductController(self)
         self.controller_solicitud = SolicitudController(self)
 
-        # Controlador de ventas
         self.controller_sale = SaleController(self)
+        self.controller_finance = FinanceController(self)
 
         # CARGUE DE INSUMOS, PRODUCTOS INICIALES
         self.controller_insumo.cargar_insumos_iniciales()
@@ -66,6 +70,11 @@ class System:
             "Ventas": {
                 "Registrar Venta": lambda: self.controller_sale.registrar_venta(),
                 "Consultar Productos (Ventas)": lambda: self.controller_sale.consultar_productos_disponibles(),
+            },
+            "Finanzas": {
+                "Reporte Gastos (Insumos)": lambda: self.controller_finance.reporte_gastos_insumos(),        # RF 4.2
+                "Reporte Ingresos (Ventas)": lambda: self.controller_finance.reporte_ingresos_ventas(),      # RF 4.3
+                "Historial Movimientos": lambda: self.controller_finance.historial_movimientos(),            # RF 4.4
             },
         }
 
