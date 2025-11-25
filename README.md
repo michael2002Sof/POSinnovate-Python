@@ -25,7 +25,8 @@ inventory/                  → Módulo de inventarios
         └── solicitud.py    → Modelo de Solicitud de Insumos
 
 
-sale/                         → Módulo de ventas
+sale/                         → Módulo de ventas    
+
     ├── controllers/              → Controladores
     │   └── sale.py
     │
@@ -34,6 +35,7 @@ sale/                         → Módulo de ventas
 
 
 finance/                      → Módulo de finanzas
+
     ├── controllers/              → Controladores
     │   └── finance.py
     │
