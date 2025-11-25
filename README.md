@@ -77,7 +77,7 @@ Brayan Casadiego
     * Estructuración del flujo de inventario
     * Priorización del backlog y facilitación del equipo
 
-    RF 2 – Gestión de Inventario:
+RF 2 – Gestión de Inventario:
 
     * RF 2.1 – Registrar / Modificar Insumos
 
@@ -117,8 +117,7 @@ Brayan Casadiego
     Ningún insumo sale del inventario sin pasar por una solicitud validada.
 
 
-
-    RF 5 – Gestión de Producción:
+RF 5 – Gestión de Producción:
 
     * RF 5.1 – Consultar disponibilidad de insumos
 
@@ -162,15 +161,15 @@ Daniel Palencia
     * Gestión de métodos de pago
     * Reportes y estadísticas
 
-    ## Gestión de Ventas (Módulo Sale)
+RF 3 - Gestión de Ventas (Módulo Sale)
 
-    # RF 3.1 – Registrar Venta
+    * RF 3.1 – Registrar Venta
     - Registro completo de ventas desde el POS.
     - Valida disponibilidad de productos mediante el inventario.
     - Calcula subtotal, impuestos y total.
     - Descarga stock automáticamente al confirmar.
 
-    # RF 3.2 – Generar Comprobante de Venta (Voucher)
+    * RF 3.2 – Generar Comprobante de Venta (Voucher)
     Genera un comprobante de venta con:
     - Productos vendidos
     - Método de pago
@@ -179,16 +178,16 @@ Daniel Palencia
 
     Incluye visualización inmediata y almacenamiento interno.
 
-    # RF 3.3 – Consultar Disponibilidad de Productos
+    * RF 3.3 – Consultar Disponibilidad de Productos
     - Consulta en tiempo real del stock disponible.
     - Acceso directo a `system.product`.
 
-    # RF 3.4 – Historial de Ventas
+    * RF 3.4 – Historial de Ventas
     - Lista completa de ventas realizadas.
     - Filtros por fecha, cliente, método de pago o vendedor.
     - Vista detallada de cada transacción.
 
-    # RF 3.5 – Gestión de Métodos de Pago
+    * RF 3.5 – Gestión de Métodos de Pago
     Soporte para:
     - Efectivo
     - Transferencia
@@ -197,31 +196,30 @@ Daniel Palencia
 
     Registra internamente cada método y su transacción asociada.
 
-    ---
 
-    ## Gestión Financiera (Módulo Finance)
+RF 4 - Gestión Financiera (Módulo Finance)
 
-    # RF 4.1 – Visualizar Transacciones Económicas
+    * RF 4.1 – Visualizar Transacciones Económicas
     - Lista de ingresos y egresos generados en el sistema.
     - Filtros avanzados por fecha, tipo o monto.
 
-    # RF 4.2 – Reporte de Gastos
+    * RF 4.2 – Reporte de Gastos
     - Registro detallado de gastos operativos.
     - Visualización por categoría, fecha y monto.
 
-    # RF 4.3 – Reporte Financiero Completo
+    * RF 4.3 – Reporte Financiero Completo
     Resumen general del estado financiero:
     - Ingresos totales
     - Egresos totales
     - Utilidad neta
 
-    Base para auditoría y análisis económico.
+Base para auditoría y análisis económico.
 
-    # RF 4.4 – Historial de Pagos
+    * RF 4.4 – Historial de Pagos
     - Historial completo de pagos asociados a ventas.
     - Incluye método de pago, monto, estado y fecha.
 
-    # RF 4.5 – Exportación de Datos
+    * RF 4.5 – Exportación de Datos
     Exportación a PDF y Excel de:
     - Transacciones
     - Gastos
